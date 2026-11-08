@@ -21,9 +21,7 @@ static struct op_lookup_struct op_redir = {
 
 static struct op_lookup_struct op_ctrl = {
   .table = {
-    {";", 0},
-    {"&&", 1},
-    {"||", 1},
+    {";", 0, &sequential_execution},
     {"|", 2, &piping}
   },
   .table_len = NUM_OF_CTRL_OPERATORS,

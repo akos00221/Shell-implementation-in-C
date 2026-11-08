@@ -37,3 +37,7 @@ void piping(struct ast_node *head){
     return;
   }
 }
+void sequential_execution(struct ast_node *head){
+  execute_ast_tree(head->left);
+  execute_ast_tree(head->right);
+}
