@@ -4,6 +4,6 @@
 struct ast_node;
 
 void piping(struct ast_node *head);
-
+void sequential_execution(struct ast_node *head);
 
 #endif

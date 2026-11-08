@@ -2,7 +2,7 @@
 #define MYSHELL_AST_TREE_H
 
 #define NUM_OF_REDIR_OPERATORS 6
-#define NUM_OF_CTRL_OPERATORS 4
+#define NUM_OF_CTRL_OPERATORS 2
 
 struct ast_node {
 	struct ast_node *left;
