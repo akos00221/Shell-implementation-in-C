@@ -77,7 +77,7 @@ void create_ast_tree(char **input_tok, int input_tok_len, struct ast_node *head)
   if (input_tok == NULL){
     return;
   }
-  int ind = -1, redir_ind = -1, min_priority = op_ctrl.highest_precedence+1;
+  int ind = -1, min_priority = op_ctrl.highest_precedence+1;
   for (int i = 0; i < input_tok_len; ++i){
     for (int h = 0; h < op_ctrl.table_len; ++h){
       if (!strcmp(op_ctrl.table[h].operator_repr, input_tok[i]) && op_ctrl.table[h].val <= min_priority){
