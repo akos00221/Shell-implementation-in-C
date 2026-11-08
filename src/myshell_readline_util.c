@@ -55,7 +55,14 @@ char *custom_completion_function(const char *text, int state) {
   if (!state) {
     int line_tok_size = 8, line_tok_len = 0, line_len;
     char *save_ptr;
+    if (!rl_line_buffer || rl_line_buffer[0] == '\0') {
+      return NULL;
+    }
+
     char *line = strdup(rl_line_buffer);
+    if (!line) {
+      return NULL;
+    }
     line_len = strlen(line);
 
     char **env_var = (char **)malloc(ENV_VAR_LEN*sizeof(char *));
@@ -64,9 +71,11 @@ char *custom_completion_function(const char *text, int state) {
     asprintf(&env_var[1], "COMP_POINT=%d", line_len);
     env_var[2] = NULL;
 
-    if (!line) { exit(1); } // fail
     char **line_tok = (char **)malloc(line_tok_size*sizeof(char*));
-    if (!line_tok) {}
+    if (!line_tok) {
+      fprintf(stderr, "Memory allocation for custom completion variable failed.\n");
+      return NULL;
+    }
     
     //line_tok[line_tok_len++] = NULL;
     line_tok[line_tok_len++] = strtok_r(line, " \t", &save_ptr);

@@ -110,6 +110,7 @@ void exit_shell(char **argv, int len) {
   free(execs.executables_table);
 
   for (int i = 0; i < jl.jobs_list_len; ++i){
+    for (int j = 0; j < jl.data[i].cmd_len; j++) {free(jl.data[i].cmd[j]);}
     free(jl.data[i].cmd);
   }
   free(jl.data);
@@ -135,6 +136,7 @@ void pwd(char **argv, int len){
     return;
   }
   printf("%s\n", dir);
+  free(dir);
 }
 void cd(char **argv, int len){
   if (len < 2){

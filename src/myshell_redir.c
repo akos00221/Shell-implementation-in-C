@@ -7,7 +7,7 @@
 static void redirect(struct ast_node *head, const int fd_, unsigned int oflag, int permissions){
   int fd = open(head->right->exec[0], oflag, permissions);
   if (fd == -1) { 
-    fprintf(stderr, "Creating/Opening \"%s\" failed\n", head->exec[0]);
+    fprintf(stderr, "Creating/Opening \"%s\" failed\n", head->right->exec[0]);
   }
   int backup = dup(fd_);
   dup2(fd, fd_);

@@ -64,7 +64,7 @@ void sweep_jobs(){
           jl.next_job_num = cur->job_num;
         }
         for (int j = 0; j < cur->cmd_len; ++j) free(cur->cmd[j]);
-        //free(cur->cmd);
+        free(cur->cmd);
         for (int j = i; j < jl.jobs_list_len-1; j++){
           jl.data[j] = jl.data[j+1];
         }
@@ -86,14 +86,16 @@ void jobs(char **argv, int len) {
   }
 
   char *full_path = search_exec(argv[0], strlen(argv[0]));
+  if (full_path == NULL){
+    return;
+  }
   pid_t id = fork();
   argv[len-1] = NULL;
   int len_wo_and = len-1;
 
-  if (full_path == NULL){
-    return;
-  }
+
   if (id > 0){
+    free(full_path);
     if (jl.jobs_list_len >= jl.jobs_list_size || jl.data == NULL){
       job *temp = (job *)realloc(jl.data, 2*jl.jobs_list_size*sizeof(job));
       if (temp == NULL){
@@ -107,7 +109,10 @@ void jobs(char **argv, int len) {
     jl.data[jl.jobs_list_len].state = RUNNING;
     jl.data[jl.jobs_list_len].id = id;
     jl.data[jl.jobs_list_len].cmd = malloc(len*sizeof(char *));
-    if (jl.data[jl.jobs_list_len].cmd == NULL) {}
+    if (jl.data[jl.jobs_list_len].cmd == NULL) {
+      fprintf(stderr, "Memory allocation for job failed.\n");
+      return;
+    }
     for (int i = 0; i < len_wo_and; ++i) jl.data[jl.jobs_list_len].cmd[i] = strdup(argv[i]);
     jl.data[jl.jobs_list_len].cmd_len = len_wo_and;
     printf("[%d] %d\n", jl.data[jl.jobs_list_len].job_num, id);
@@ -117,9 +122,12 @@ void jobs(char **argv, int len) {
   else if (id == 0){
     //printf("%s\n", full_path);
     execv(full_path, argv);
+    free(full_path);
+    exit(1);
   }
   else if (id < 0){
     fprintf(stderr, "Subprocess failed.");
+    free(full_path);
     exit(1);
   }
   

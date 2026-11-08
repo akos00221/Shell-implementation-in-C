@@ -29,6 +29,9 @@ static void create_token(char ***input_tok, int *size, int *len,
 }
 
 void parse_input(char *input, char ***input_tok, int *size, int *len) {
+  if (!input){
+    return;
+  }
   char c;
   char token_buffer[INPUT_BUFFER_SIZE] = {0};
   parse_states state = NORMAL;
