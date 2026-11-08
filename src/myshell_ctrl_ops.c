@@ -7,8 +7,6 @@
 
 void piping(struct ast_node *head){
   int pipefd[2] = {0};
-  int output_size = 16, output_len = 0;
-  char **output = NULL;
   if (pipe(pipefd) < 0) exit(1); 
   pid_t id = fork();
   if (id > 0){
